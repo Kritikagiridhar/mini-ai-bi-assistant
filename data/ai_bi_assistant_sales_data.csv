@@ -1,0 +1,52 @@
+Transaction_Id,Order_date,Product,Category,Region,Sales_channel,Quantity,Unit_price,Discount_amount,Status
+TXN0001,05-01-2026,Wireless Mouse,Accessories,North,Online,5,25.00,5.00,Completed
+TXN0002,12-01-2026,Mechanical Keyboard,Accessories,South,Retail,2,80.00,0.00,Completed
+TXN0003,18-01-2026,4K Monitor,Electronics,East,Online,1,350.00,25.00,Completed
+TXN0004,22-01-2026,Ergonomic Chair,Office Supplies,West,Retail,3,150.00,30.00,Completed
+TXN0005,27-01-2026,USB-C Hub,Accessories,North,Online,4,45.00,10.00,Completed
+TXN0006,30-01-2026,Smartwatch,Electronics,South,Online,2,200.00,15.00,Completed
+TXN0007,03-02-2026,Laptop Stand,Office Supplies,East,Retail,6,35.00,0.00,Completed
+TXN0008,07-02-2026,Noise-Canceling Headphones,Electronics,West,Online,2,180.00,20.00,Completed
+TXN0009,12-02-2026,Desk Mat,Office Supplies,North,Retail,10,20.00,15.00,Completed
+TXN0010,16-02-2026,Bluetooth Speaker,Electronics,South,Online,3,60.00,5.00,Completed
+TXN0011,21-02-2026,Wireless Mouse,Accessories,East,Retail,8,25.00,10.00,Completed
+TXN0012,25-02-2026,Mechanical Keyboard,Accessories,West,Online,4,85.00,15.00,Completed
+TXN0013,28-02-2026,4K Monitor,Electronics,North,Online,2,350.00,50.00,Completed
+TXN0014,02-03-2026,Ergonomic Chair,Office Supplies,South,Retail,1,160.00,0.00,Completed
+TXN0015,06-03-2026,Smartwatch,Electronics,East,Online,3,210.00,30.00,Completed
+TXN0016,11-03-2026,USB-C Hub,Accessories,West,Retail,5,45.00,5.00,Completed
+TXN0017,15-03-2026,Laptop Stand,Office Supplies,North,Online,4,40.00,0.00,Completed
+TXN0018,19-03-2026,Noise-Canceling Headphones,Electronics,South,Retail,1,190.00,10.00,Completed
+TXN0019,23-03-2026,Desk Mat,Office Supplies,East,Online,7,20.00,5.00,Completed
+TXN0020,27-03-2026,Bluetooth Speaker,Electronics,West,Retail,4,65.00,10.00,Completed
+TXN0021,30-03-2026,Wireless Mouse,Accessories,North,Online,6,26.00,0.00,Completed
+TXN0022,04-04-2026,4K Monitor,Electronics,South,Retail,2,360.00,40.00,Completed
+TXN0023,08-04-2026,Ergonomic Chair,Office Supplies,East,Online,2,155.00,15.00,Completed
+TXN0024,12-04-2026,Mechanical Keyboard,Accessories,West,Retail,3,85.00,5.00,Completed
+TXN0025,16-04-2026,USB-C Hub,Accessories,North,Online,5,45.00,10.00,Completed
+TXN0026,20-04-2026,Smartwatch,Electronics,South,Online,1,220.00,0.00,Completed
+TXN0027,24-04-2026,Laptop Stand,Office Supplies,East,Retail,3,40.00,5.00,Completed
+TXN0028,27-04-2026,Noise-Canceling Headphones,Electronics,West,Online,3,185.00,25.00,Completed
+TXN0029,29-04-2026,Desk Mat,Office Supplies,North,Retail,8,22.00,0.00,Completed
+TXN0030,02-05-2026,Bluetooth Speaker,Electronics,South,Online,5,60.00,15.00,Completed
+TXN0031,06-05-2026,Wireless Mouse,Accessories,East,Retail,4,28.00,0.00,Completed
+TXN0032,10-05-2026,Mechanical Keyboard,Accessories,West,Online,2,90.00,10.00,Completed
+TXN0033,14-05-2026,4K Monitor,Electronics,North,Online,1,370.00,30.00,Returned
+TXN0034,17-05-2026,Ergonomic Chair,Office Supplies,South,Retail,0,165.00,0.00,Completed
+TXN0035,20-05-2026,USB-C Hub,Accessories,East,Online,6,45.00,12.00,Completed
+TXN0036,23-05-2026,Smartwatch,Electronics,West,Retail,2,215.00,20.00,Completed
+TXN0037,26-05-2026,Laptop Stand,Office Supplies,North,Online,5,38.00,0.00,Completed
+TXN0038,29-05-2026,Noise-Canceling Headphones,Electronics,South,Retail,2,195.00,15.00,Completed
+TXN0039,31-05-2026,Desk Mat,Office Supplies,East,Online,4,22.00,4.00,Completed
+TXN0040,02-06-2026,Bluetooth Speaker,Electronics,West,Online,3,65.00,5.00,Completed
+TXN0041,05-06-2026,Wireless Mouse,Accessories,North,Retail,7,26.00,10.00,Completed
+TXN0042,09-06-2026,Mechanical Keyboard,Accessories,South,Online,4,90.00,20.00,Completed
+TXN0043,12-06-2026,4K Monitor,Electronics,East,Retail,1,380.00,20.00,Completed
+TXN0044,16-06-2026,Ergonomic Chair,Office Supplies,West,Online,3,170.00,25.00,Completed
+TXN0045,19-06-2026,USB-C Hub,Accessories,North,Retail,4,48.00,0.00,Completed
+TXN0046,22-06-2026,Smartwatch,Electronics,South,Online,2,225.00,15.00,Completed
+TXN0047,24-06-2026,Laptop Stand,Office Supplies,East,Online,5,42.00,10.00,Completed
+TXN0048,26-06-2026,Noise-Canceling Headphones,Electronics,West,Retail,1,200.00,10.00,Completed
+TXN0049,28-06-2026,Desk Mat,Office Supplies,North,Online,6,22.00,0.00,Completed
+TXN0050,29-06-2026,Bluetooth Speaker,Electronics,South,Retail,2,70.00,5.00,Completed
+TXN0051,30-06-2026,Wireless Mouse,Accessories,West,Online,3,,0.00,Completed
