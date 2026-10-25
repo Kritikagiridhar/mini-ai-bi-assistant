@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini AI Business Intelligence Assistant</title>
+  <meta name="description" content="Deterministic AI-powered business intelligence assistant for enterprise sales data analytics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --danger: #ef4444;
+      --danger-bg: #fef2f2;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Question Form */
+    .input-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 0.85rem 1.15rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    button {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Chips */
+    .chips-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .chip {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+      border-radius: 9999px;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.825rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chip:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+    }
+
+    /* Result Area */
+    #resultArea {
+      display: none;
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .mode-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mode-llm {
+      background: #fdf4ff;
+      color: #a855f7;
+      border: 1px solid #f0abfc;
+    }
+
+    .mode-fallback {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid #fde68a;
+    }
+
+    .headline {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .notes-banner {
+      font-size: 0.825rem;
+      color: #475569;
+      background: #f1f5f9;
+      border-left: 3px solid #94a3b8;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Table */
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    /* Chart Container */
+    #chartWrapper {
+      display: none;
+      margin: 1.5rem 0;
+      height: 280px;
+      position: relative;
+    }
+
+    /* Collapsible SQL */
+    details {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      margin-top: 1.25rem;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #475569;
+      user-select: none;
+    }
+
+    pre {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-top: 0.75rem;
+      line-height: 1.5;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Data Quality Audit Drawer */
+    .audit-link {
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Mini AI Business Intelligence Assistant</h1>
+        <p class="subtitle">Natural-language analytics backed by deterministic SQL on clean sales data.</p>
+      </div>
+      <div id="statusBadge" class="status-badge">
+        <span class="status-dot"></span>
+        <span id="statusText">Connecting...</span>
+      </div>
+    </header>
+
+    <!-- Query Card -->
+    <div class="card">
+      <form id="askForm" onsubmit="handleAsk(event)">
+        <div class="input-group">
+          <input 
+            type="text" 
+            id="questionInput" 
+            placeholder="Ask a question (e.g. 'What is our total revenue for 2026?')" 
+            maxlength="500" 
+            autocomplete="off"
+            required
+          />
+          <button type="submit" id="askBtn">
+            <span id="btnText">Ask Assistant</span>
+            <span id="btnSpinner" class="spinner" style="display: none;"></span>
+          </button>
+        </div>
+      </form>
+
+      <div class="chips-label">Example Questions:</div>
+      <div class="chips" id="chipsContainer">
+        <div class="chip" onclick="setQuestion('What is our total revenue for 2026?')">Total Revenue 2026</div>
+        <div class="chip" onclick="setQuestion('What are the top products by revenue?')">Top Products</div>
+        <div class="chip" onclick="setQuestion('Show me the monthly revenue trend and MoM growth')">Monthly Revenue Trend</div>
+        <div class="chip" onclick="setQuestion('Which region has the highest sales?')">Top Regions</div>
+        <div class="chip" onclick="setQuestion('Compare revenue between March and April 2026')">Compare March vs April</div>
+      </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div id="errorCard" class="card" style="display: none; border-color: #fca5a5; background: var(--danger-bg); color: #991b1b;">
+      <p id="errorText" style="font-size: 0.9rem; font-weight: 500;"></p>
+    </div>
+
+    <!-- Result Card -->
+    <div id="resultArea" class="card">
+      <div class="result-header">
+        <div>
+          <span id="intentTag" style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">INTENT: TOTAL_REVENUE</span>
+          <h2 id="headlineText" class="headline">Answer headline goes here</h2>
+        </div>
+        <span id="modeBadge" class="mode-pill mode-fallback">FALLBACK</span>
+      </div>
+
+      <div id="notesBanner" class="notes-banner">Data notes</div>
+
+      <!-- Chart -->
+      <div id="chartWrapper">
+        <canvas id="trendChart"></canvas>
+      </div>
+
+      <!-- Supporting Data Table -->
+      <div id="tableWrapper" class="table-responsive">
+        <table id="dataTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Collapsible SQL Inspection -->
+      <details id="sqlDetails">
+        <summary>How was this calculated? (Executed SQL)</summary>
+        <pre><code id="sqlBlock">SELECT * FROM sales</code></pre>
+      </details>
+    </div>
+
+    <!-- Data Quality Footer -->
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
+      <div>Database: 48 valid transactions loaded &middot; 3 quarantined records</div>
+      <a class="audit-link" onclick="toggleDataQualityModal()">View Quarantine Audit</a>
+    </div>
+
+    <!-- Data Quality Modal -->
+    <div id="qualityModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
+      <div style="background: white; border-radius: 12px; width: 90%; max-width: 650px; padding: 1.5rem; max-height: 80vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 700;">Data Quality & Quarantine Audit</h3>
+          <button style="background: none; border: none; color: #64748b; font-size: 1.25rem; cursor: pointer; padding: 0.25rem;" onclick="toggleDataQualityModal()">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; color: #475569; margin-bottom: 1rem;">
+          The pipeline enforces strict data contracts. Non-completed orders, zero/negative quantities, and missing prices are isolated into <code>rejected_records</code> with reason tags.
+        </p>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Transaction ID</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody id="qualityTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let trendChartInstance = null;
+
+    // Initialize health check on load
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('/api/health');
+        const data = await res.json();
+        const statusText = document.getElementById('statusText');
+        if (data.status === 'healthy') {
+          statusText.textContent = `Online (${data.loaded_count} Records)`;
+        } else {
+          statusText.textContent = `Status: ${data.status}`;
+        }
+      } catch (err) {
+        document.getElementById('statusText').textContent = 'Server Offline';
+      }
+    });
+
+    function setQuestion(text) {
+      const input = document.getElementById('questionInput');
+      input.value = text;
+      input.focus();
+    }
+
+    async function handleAsk(e) {
+      e.preventDefault();
+      const input = document.getElementById('questionInput');
+      const question = input.value.trim();
+      if (!question) return;
+
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const askBtn = document.getElementById('askBtn');
+      const errorCard = document.getElementById('errorCard');
+      const resultArea = document.getElementById('resultArea');
+
+      errorCard.style.display = 'none';
+      askBtn.disabled = true;
+      btnText.textContent = 'Analyzing...';
+      btnSpinner.style.display = 'inline-block';
+
+      try {
+        const res = await fetch('/api/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.detail || 'An error occurred while answering your question.');
+        }
+
+        renderResult(data);
+      } catch (err) {
+        errorCard.style.display = 'block';
+        document.getElementById('errorText').textContent = err.message;
+        resultArea.style.display = 'none';
+      } finally {
+        askBtn.disabled = false;
+        btnText.textContent = 'Ask Assistant';
+        btnSpinner.style.display = 'none';
+      }
+    }
+
+    function renderResult(data) {
+      const resultArea = document.getElementById('resultArea');
+      resultArea.style.display = 'block';
+
+      // Header & Badges
+      document.getElementById('intentTag').textContent = `INTENT: ${data.intent.toUpperCase()}`;
+      document.getElementById('headlineText').textContent = data.answer;
+      document.getElementById('notesBanner').textContent = data.data_notes;
+      document.getElementById('sqlBlock').textContent = data.sql;
+
+      const modeBadge = document.getElementById('modeBadge');
+      if (data.mode === 'llm') {
+        modeBadge.textContent = 'MODE: GEMINI LLM';
+        modeBadge.className = 'mode-pill mode-llm';
+      } else {
+        modeBadge.textContent = 'MODE: FALLBACK (REGEX)';
+        modeBadge.className = 'mode-pill mode-fallback';
+      }
+
+      // Render Supporting Table
+      renderTable(data.supporting_data);
+
+      // Render Chart if applicable
+      renderChart(data.intent, data.supporting_data);
+    }
+
+    function renderTable(rows) {
+      const thead = document.getElementById('tableHead');
+      const tbody = document.getElementById('tableBody');
+      const tableWrapper = document.getElementById('tableWrapper');
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      if (!rows || rows.length === 0) {
+        tableWrapper.style.display = 'none';
+        return;
+      }
+      tableWrapper.style.display = 'block';
+
+      const columns = Object.keys(rows[0]);
+      const trHead = document.createElement('tr');
+      columns.forEach(col => {
+        const th = document.createElement('th');
+        th.textContent = col.replace(/_/g, ' ');
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        columns.forEach(col => {
+          const td = document.createElement('td');
+          let val = row[col];
+          if (typeof val === 'number') {
+            if (col.includes('revenue') || col.includes('value') || col.includes('price')) {
+              val = '$' + val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            } else if (col.includes('pct') || col.includes('share')) {
+              val = val.toFixed(2) + '%';
+            } else {
+              val = val.toLocaleString('en-US');
+            }
+          }
+          td.textContent = val !== null && val !== undefined ? val : '-';
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderChart(intent, rows) {
+      const chartWrapper = document.getElementById('chartWrapper');
+      const canvas = document.getElementById('trendChart');
+
+      if (trendChartInstance) {
+        trendChartInstance.destroy();
+        trendChartInstance = null;
+      }
+
+      if ((intent === 'monthly_revenue_trend' || intent === 'compare_months') && rows && rows.length > 0) {
+        chartWrapper.style.display = 'block';
+        const labels = rows.map(r => r.year_month || r.month);
+        const dataValues = rows.map(r => r.total_revenue);
+
+        trendChartInstance = new Chart(canvas, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Total Revenue ($)',
+              data: dataValues,
+              backgroundColor: '#3b82f6',
+              borderRadius: 6,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: value => '$' + value.toLocaleString()
+                }
+              }
+            }
+          }
+        });
+      } else {
+        chartWrapper.style.display = 'none';
+      }
+    }
+
+    async function toggleDataQualityModal() {
+      const modal = document.getElementById('qualityModal');
+      if (modal.style.display === 'flex') {
+        modal.style.display = 'none';
+      } else {
+        modal.style.display = 'flex';
+        try {
+          const res = await fetch('/api/data-quality');
+          const data = await res.json();
+          const tbody = document.getElementById('qualityTableBody');
+          tbody.innerHTML = '';
+          data.rejected_records.forEach(r => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td style="font-family: monospace; font-weight: 600;">${r.transaction_id || 'N/A'}</td><td>${r.reason}</td>`;
+            tbody.appendChild(tr);
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
